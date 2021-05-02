@@ -2,8 +2,6 @@ from FibinoacciSeries import FibinoacciSeries
 import logging
 
 
-
-
 def test_to_print_fseries():
     fobject = FibinoacciSeries(3)
     output_list = fobject.to_print_fseries()
