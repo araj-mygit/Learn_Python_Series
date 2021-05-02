@@ -16,7 +16,7 @@
 """
 import argparse
 
-class FibinoacciSeries():
+class FibinoacciSeries:
    
     def __init__(self, fnum):
         self.fnum = fnum
@@ -32,15 +32,18 @@ class FibinoacciSeries():
         
         first = 0
         second = 1
+        output_list = []
 
         if self.fnum < 0 or self.fnum == 0:
             print("\nWARNING: Enter a positive integer greater than 0 !! ")
         else:    
             for each_num in range(self.fnum):
                 print(first)
+                output_list.append(first)
                 temp = first
                 first = second
                 second = temp + first
+        return output_list    
 
 def FSeries_Parser():
     """
