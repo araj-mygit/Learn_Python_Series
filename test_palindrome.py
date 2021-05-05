@@ -20,16 +20,3 @@ def test_to_find_palindrom_negative_case():
 def test_to_find_palindrome_runtime_error():
     with pytest.raises(RuntimeError):
         pobject = PalindromeFinder(1111)
-
-
-
-
-
-
-
-      
-
-            
-    
-
-         
