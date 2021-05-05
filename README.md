@@ -30,5 +30,3 @@ Palindrome Finder
     How to execute the script on terminal
         1. cd to path where the script is saved.
         2. execute "python3 Palindrome.py --input AMMA"    
-
-

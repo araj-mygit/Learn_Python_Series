@@ -14,6 +14,7 @@
         1. cd to path where the script is saved.
         2. execute "python3 FibinoacciSeries.py <--i> 5"
 """
+
 import argparse
 
 class FibinoacciSeries:
