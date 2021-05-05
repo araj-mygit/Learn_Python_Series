@@ -74,5 +74,3 @@ if __name__ == '__main__':
         fobject.to_print_fseries()
     finally:
         print("Execution completed !")    
-
-    

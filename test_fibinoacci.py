@@ -24,11 +24,6 @@ def test_to_print_fseries_string_input():
     with pytest.raises(RuntimeError):
         fobject = FibinoacciSeries("A")
 
-
-
-
-    
-            
     
 
 
