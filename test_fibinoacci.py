@@ -14,7 +14,7 @@ def test_to_print_fseries_integer_input():
     fobject = FibinoacciSeries(3)
     output_list = fobject.to_print_fseries()
     assert output_list == [0,1,1]
-    logging.info("Actual result is equal to Expected result")
+    #logging.info("Actual result is equal to Expected result")
 
 def test_to_print_fseries_string_input():
     """
