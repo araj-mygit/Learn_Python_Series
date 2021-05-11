@@ -11,9 +11,9 @@ Output:
 
  How to execute.
     1. cd to path where the script is saved.
-    2. execute "python3 json_schema_validate.py --json {full path to input json file}"
+    2. execute "python3 json_schema_validate.py --json {full path to input json file} 
+                        --schema {full path for schema}"
 """
-
 
 import os
 import json
@@ -22,7 +22,6 @@ import jsonschema
 import json_schema_validate
 from os.path import expanduser
 
-
 class ValidateJson():
 
     """
@@ -30,21 +29,24 @@ class ValidateJson():
     json input aganist given SARJ schema
     """
 
-    def __init__(self, jdata):
+    def __init__(self, jdata, schema):
+
+        """
+        class constructor
+        """
+
         self.jdata = jdata
-
-    def get_schema(self):
+        self.schema = schema
+       
+    def load_json(self, file_name):
 
         """
-        Function to read the schema as python object.
-        Returns the Python object. 
+        Load a json file and return the data 
         """
 
-        path = os.getcwd()
-        SARJSchema = os.path.join(path, "Schema","SARJSchema.json")
-        with open(SARJSchema) as jsonfile:
-            schema = json.load(jsonfile)
-        return schema
+        with open(file_name, encoding='utf-8') as json_file:
+            data = json.load(json_file)
+        return data   
 
     def validate_json(self):
 
@@ -53,23 +55,20 @@ class ValidateJson():
         Returns positive message if the json matches the schema and 
         negative message if the json does not matches the schema.
         """
-        
-        schema_to_match = self.get_schema()
-        with open (self.jdata) as json_obj:
-            data = json.load(json_obj)
+
+        flag = 0
+        schema_to_match = self.load_json(self.schema)
+        data = self.load_json(self.jdata)
         try:
             jsonschema.validate(instance= data, schema=schema_to_match)
+            flag = True
+            print("\n Given JSON is valid")
         except jsonschema.exceptions.ValidationError as Verr:
             print(Verr)
-            error_message = "Given Json is not valid"
-            print("\n", error_message)
-            return False
-
-        passed_message = "Given JSON is valid"
-        print("\n", passed_message)
-        return True    
-
-
+            flag = False
+            print("\n Given JSON is not valid")
+        return flag
+        
 def cmd_line_args(): 
 
     """
@@ -78,7 +77,9 @@ def cmd_line_args():
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--json", type=str, required=True,
-                        help="Input a jsonfile")                 
+                        help="Input a jsonfile")
+    parser.add_argument("--schema", type=str, required=True,
+                        help="Input a jsonfile")                                     
     return parser
 
 if __name__ == '__main__':
@@ -86,7 +87,7 @@ if __name__ == '__main__':
     parser = cmd_line_args()
     args = parser.parse_args()
     try:
-        json_object = ValidateJson(jdata = args.json)
+        json_object = ValidateJson(jdata = args.json, schema = args.schema)
     except Exception as allexce:
         print(f"Other exception: {allexce}")
     else:
