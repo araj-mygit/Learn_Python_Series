@@ -1,0 +1,302 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+  
+    "definitions": {
+      "metric": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Name of the metric.",
+            "type": "string"
+          },
+          "value": {
+            "description": "Value of the metric.  This property is optional.  When not present, the value is assumed to be NaN.",
+            "type": "number"
+          },
+          "LSL": {
+            "description": "Lower Specification Limit for the metric.  This property is optional.  When not present, the value can be assumed to be undefined.",
+            "type": "number"
+          },
+          "USL": {
+            "description": "Upper Specification Limit for the metric.  This property is optional.  When not present, the value can be assumed to be undefined.",
+            "type": "number"
+          },
+          "UOM": {
+            "description": "Unit Of Measure for the value, LSL, and USL.",
+            "type": "string"
+          },
+          "RAD": {
+            "description": "Rounding After Decimal, also known as the scale of the value which is the number of digits to the right of the decimal.",
+            "type": "number"
+          }
+        },
+        "required": [
+          "name",
+          "UOM",
+          "RAD"
+        ]
+      },
+      "sequencingLibraryInformation": { 
+        "type": "object",
+        "properties": {
+          "libraryType": {
+            "type": "string",
+            "enum": ["DNA","RNA"]
+          },
+          "libraryId": {
+            "type": "string"
+          },
+          "analysisCompleted": {
+            "type": "boolean"
+          },
+          "passQualityControl": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "libraryType",
+          "libraryId",
+          "analysisCompleted"
+        ]
+      },
+      "qualityControlMetricInformation": {
+        "type": "object",
+        "properties": {
+          "name": {
+           "type": "string"
+          },
+          "passQualityControl": {
+            "type": "boolean"
+          },
+          "metrics": {
+            "type": "array",
+            "items": { "$ref": "#/definitions/metric" }
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "expandedMetricInformation": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "metrics": {
+            "type": "array",
+            "items": { "$ref": "#/definitions/metric" }
+          }
+        },
+        "required": [
+          "name",
+          "metrics"
+        ]
+      },
+      "consumableInformation": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Consumable name",
+            "type": "string"
+          },
+          "lotNumber": {
+            "description": "Consumable lot number",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "name",
+          "lotNumber"
+        ]
+      }
+    },
+  
+    "type": "object",
+    "title": "sampleAnalysisResults",
+    "properties": {
+      "checksum": {
+        "description": "Salted checksum of the data object.  This is used to check for intended or unintended changes to contents of the JSON file.",
+        "type": "string"
+      },
+      "data": {
+        "description": "Analysis results for a given sample",
+        "type": "object",
+        "properties": {
+          "schemaVersion": {
+            "description": "Semantic version for the schema definition.  Format is <MAJOR>.<MINOR>.<PATCH>.",
+            "type": "string"
+          },
+          "sampleInformation": {
+            "type": "object",
+            "properties": {
+              "sampleId": {
+                "description": "Unique ID for the sample associated with the data.",
+                "type": "string"
+              },
+              "sex": {
+                "type": "string",
+                "enum": ["Male", "Female", "Unknown"]
+              },
+              "analysisDate": {
+                "type": "string"
+              },
+              "analysisTime": {
+                "type": "string"
+              },
+              "analysisName": {
+                "type": "string"
+              },
+              "runId": {
+                "type": "string"
+              },
+              "consumableInformation": {
+                "description": "Optional information about the consumables.",
+                "type": "array",
+                "items": { "$ref": "#/definitions/consumableInformation" }
+              },
+              "diseaseInformation": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  },
+                  "label": {
+                    "type": "string"
+                  },
+                  "source": {
+                    "type": "string"
+                  },
+                  "sourceVersion": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code",
+                  "label",
+                  "source",
+                  "sourceVersion"
+                ]
+              }
+            },
+            "required": [
+              "sampleId",
+              "analysisDate",
+              "analysisTime"
+            ]
+          },
+          "softwareConfiguration": {
+            "type": "object",
+            "properties": {
+              "analysisSoftwareName": {
+                "description": "Name of the secondary analysis pipeline.",
+                "type": "string"
+              },
+              "analysisSoftwareVersion": {
+                "description": "Version of the secondary analysis pipeline.",
+                "type": "string"
+              },
+              "moduleSoftwareVersion": {
+                "description": "Version of the top level module (e.g. LRM module).",
+                "type": "string"
+              },
+              "nirvanaVersionList": {
+                "description": "Version of the Nirvana components used in the analysis.  There may be more than one version used.",
+                "type": "array"
+              },
+              "genomeBuild": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "analysisSoftwareName",
+              "analysisSoftwareVersion",
+              "nirvanaVersionList",
+              "genomeBuild"
+            ]
+          },
+          "sampleMetrics": {
+            "type": "object",
+            "properties": {
+              "run": {
+                "description": "Run metrics.  This object may not exist, depending on the inputs used to run the analysis.",
+                "type": "object",
+                "properties": {
+                  "passRunQualityControl": {
+                    "description": "True if the run succeeded without any software errors.",
+                    "type": "boolean"
+                  },
+                  "metrics": {
+                    "type": "array",
+                    "items": { "$ref": "#/definitions/metric" }
+                  }
+                },
+                "required": [
+                  "metrics"
+                ]
+              },
+              "sequencingLibraries": {
+                "description": "List of sequencing libraries that were executed in the analysis workflow.",
+                "type": "array",
+                "items": { "$ref": "#/definitions/sequencingLibraryInformation" }
+              },
+              "qualityControlMetrics": {
+                "type": "array",
+                "items": { "$ref": "#/definitions/qualityControlMetricInformation" }
+              },
+              "expandedMetrics": {
+                "type": "array",
+                "items": { "$ref": "#/definitions/expandedMetricInformation" }
+              }
+            },
+            "required": [
+              "sequencingLibraries",
+              "qualityControlMetrics",
+              "expandedMetrics"
+            ]
+          },
+          "variants": {
+            "description": "All passing variants from the analysis run.",
+            "type": "object",
+            "properties": {
+              "smallVariants": {
+                "type": "array"
+              },
+              "copyNumberVariants": {
+                "type": "array"
+              },
+              "geneFusions": {
+                "type": "array"
+              },
+              "dnaFusions": {
+                "type": "array"
+              },
+              "spliceVariants": {
+                "type": "array"
+              }
+            }
+          },
+          "biomarkers": {
+            "type": "object",
+            "properties": {
+              "tumorMutationalBurden": {},
+              "microsatelliteInstability": {}
+            }
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "sampleInformation",
+          "softwareConfiguration",
+          "sampleMetrics",
+          "variants",
+          "biomarkers"
+        ]
+      }
+    },
+    "required": [
+      "checksum",
+      "data"
+    ],
+    "additionalProperties": false
+  }
