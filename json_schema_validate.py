@@ -15,7 +15,6 @@ Output:
                         --schema {full path for schema}"
 """
 
-import os
 import json
 import argparse
 import jsonschema
@@ -89,7 +88,7 @@ if __name__ == '__main__':
     try:
         json_object = ValidateJson(jdata = args.json, schema = args.schema)
     except Exception as allexce:
-        print(f"Other exception: {allexce}")
+        print(f"Other exception {allexce}")
     else:
         json_object.validate_json()    
     finally:
