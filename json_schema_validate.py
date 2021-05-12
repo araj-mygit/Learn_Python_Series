@@ -1,6 +1,6 @@
 """
 Python script to validate a Sample Analysis Results JSON file against,
-schema written accroding to draft 6 specifications.
+schema written according to draft 4 specifications.
 
 Input:
     Sample Analysis Results JSON file
@@ -18,7 +18,6 @@ Output:
 import json
 import argparse
 import jsonschema
-import json_schema_validate
 from os.path import expanduser
 
 class ValidateJson():
@@ -68,7 +67,7 @@ class ValidateJson():
             print("\n Given JSON is not valid")
         return flag
         
-def cmd_line_args(): 
+def create_parser(): 
 
     """
     Function to pass command line arguments.
@@ -83,7 +82,7 @@ def cmd_line_args():
 
 if __name__ == '__main__':
 
-    parser = cmd_line_args()
+    parser = create_parser()
     args = parser.parse_args()
     try:
         json_object = ValidateJson(jdata = args.json, schema = args.schema)
