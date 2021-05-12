@@ -14,13 +14,20 @@
         1. cd to path where the script is saved.
         2. execute "python3 FibinoacciSeries.py <--i> 5"
 """
+
 import argparse
 
 class FibinoacciSeries:
    
     def __init__(self, fnum):
+        # The try...except block only works if the prraser is not able to handle the data type error.
+        try: 
+            if not isinstance(fnum, int):
+                raise RuntimeError("Input is string, please re-try with numeric entry.")
+        except ValueError as ve: 
+            print(ve)
         self.fnum = fnum
-
+            
     def to_print_fseries(self):
         """
         Function generate the series if the total number 
@@ -34,7 +41,7 @@ class FibinoacciSeries:
         second = 1
         output_list = []
 
-        if self.fnum < 0 or self.fnum == 0:
+        if self.fnum < 0 or self.fnum == 0 :
             print("\nWARNING: Enter a positive integer greater than 0 !! ")
         else:    
             for each_num in range(self.fnum):
@@ -43,7 +50,7 @@ class FibinoacciSeries:
                 temp = first
                 first = second
                 second = temp + first
-        return output_list    
+            return output_list    
 
 def FSeries_Parser():
     """
@@ -51,14 +58,20 @@ def FSeries_Parser():
     """
     
     parser = argparse.ArgumentParser()
+    #if type = int is not given, then the try...except in the __init__ method works. 
     parser.add_argument("--input",required=True, type=int,
-                        help="Enter an integer <= 1", dest="fnum")                 
+                        help="Enter an integer <= 1")                 
     return parser
 
 if __name__ == '__main__':
     parser = FSeries_Parser()
     args = parser.parse_args()
-    if args.fnum > 0:
-        print(f"\nFibinocci Series of {args.fnum} numbers is:")
-    fobject = FibinoacciSeries(args.fnum)
-    fobject.to_print_fseries()
+    try:
+        fobject = FibinoacciSeries(args.input)
+    except RuntimeError as E:
+        print(f"Error occured: {E}")    
+    else:    
+        print(f"\nFibinocci Series of {args.input} numbers is:")  
+        fobject.to_print_fseries()
+    finally:
+        print("Execution completed !")    
