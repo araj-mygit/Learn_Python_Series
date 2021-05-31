@@ -1,8 +1,9 @@
 import re
 import argparse
 import sys
+import csv
 
-class FindUniqueWordCount():
+class FindUniqueWordCount:
 
     """
     class containing methods to find the unique words from a 
@@ -12,7 +13,6 @@ class FindUniqueWordCount():
     
     Output : Dispalys all the unique words and their count.
     """
-
 
     def __init__(self, text):
 
@@ -27,15 +27,12 @@ class FindUniqueWordCount():
         """
         Function checks whether the input file is of .txt extension.
         """
-        try:
-            if self.text.endswith('.txt'):
-                print("Matches the extension")
-                return True     
-            raise ValueError         
-        except ValueError:
-            print("Input file extension must be .txt")
-            sys.exit()
-
+        
+        if self.text.endswith('.txt'):
+            print("Input file matches the extension")
+            return True 
+        else: raise ValueError         
+        
 
     def remove_tooltip_reference(self): 
 
@@ -87,19 +84,23 @@ class FindUniqueWordCount():
         """
 
         unique_words =  (set(self.remove_whitespace_from_string().split()))
-        print("The unique words form the given content : \n ",unique_words)
+        #print("The unique words form the given content : \n ",unique_words)
         return unique_words
 
 
-    def count_of_unique_word(self):
+    def find_unique_word(self):
 
         """
         Method to count the number of unique words
         """
 
         set_to_list = list(self.get_set_of_unique_word())        
-        count = len(set_to_list)
-        print("Count of unique words :", count)
+
+        with open("UniquewordCount.txt", "w") as file:
+            write = csv.writer(file)
+            write.writerow(set_to_list)
+            file.close()   
+        return set_to_list   
 
 
 def create_parser(): 
@@ -118,4 +119,8 @@ if __name__ == '__main__':
     parser = create_parser()
     args = parser.parse_args()
     class_obj = FindUniqueWordCount(text = args.text)
-    class_obj.count_of_unique_word()
+    try:
+        class_obj.find_unique_word()
+    except ValueError:
+            print("Input file extension must be .txt")
+            sys.exit()    
