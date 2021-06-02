@@ -52,3 +52,14 @@ def test_get_set_of_unique_word():
     loaded_input = FindUniqueWordCount(input_file_with_whitespace)
     output = loaded_input.get_set_of_unique_word()
     assert output == set_of_unique_words
+
+
+def test_find_unique_word():
+
+    """
+    Pytest to create a text file and append the unique words to it.
+    """
+
+    loaded_input = FindUniqueWordCount(input_file_with_whitespace)
+    output_file_generated = loaded_input.find_unique_word()
+    assert "UniquewordCount.txt" in (sys.path[0] + "/UniquewordCount.txt")

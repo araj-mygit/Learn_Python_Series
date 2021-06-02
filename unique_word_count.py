@@ -2,6 +2,7 @@ import re
 import argparse
 import sys
 import csv
+import os
 
 class FindUniqueWordCount:
 
@@ -29,7 +30,6 @@ class FindUniqueWordCount:
         """
         
         if self.text.endswith('.txt'):
-            print("Input file matches the extension")
             return True 
         else: raise ValueError         
         
@@ -76,6 +76,27 @@ class FindUniqueWordCount:
         clean_string = remove_whitespace_string.casefold()
         return clean_string
 
+    #To do 
+    def count_of_each_word(self):
+        """
+        Method to count the number of each word present sentence in the text file.
+        """
+
+        search_string = self.remove_whitespace_from_string()
+        d = dict()
+        for line in search_string:
+            line = line.strip()
+            line = line.lower()
+            words = line.split(" ")
+
+            for word in words:
+                if word in d:
+                    d[word] = d[word] + 1
+                else:
+                    d[word] = 1
+
+        for key in list(d.keys()):
+            return key, ":", d[key]              
 
     def get_set_of_unique_word(self):
 
@@ -84,25 +105,23 @@ class FindUniqueWordCount:
         """
 
         unique_words =  (set(self.remove_whitespace_from_string().split()))
-        #print("The unique words form the given content : \n ",unique_words)
         return unique_words
 
 
     def find_unique_word(self):
 
         """
-        Method to count the number of unique words
+        Method to count the number of unique words and write to txt file
         """
 
-        set_to_list = list(self.get_set_of_unique_word())        
-
-        with open("UniquewordCount.txt", "w") as file:
+        set_to_list = list(self.get_set_of_unique_word()) 
+        
+        with open("UniquewordCount.txt", "a") as file:
             write = csv.writer(file)
             write.writerow(set_to_list)
             file.close()   
-        return set_to_list   
-
-
+    
+    
 def create_parser(): 
 
     """
